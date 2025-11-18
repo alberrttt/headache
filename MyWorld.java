@@ -25,7 +25,8 @@ public class MyWorld extends World
             int y = (int)(Math.random()*getHeight());
             this.addObject(pill, x, y);
         }
- 
+        setBackground("./images/grass.png");
+        
     }
     public static void main(String[] args) {
     }

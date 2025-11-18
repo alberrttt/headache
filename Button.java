@@ -8,20 +8,34 @@ import greenfoot.*;
  */
 class Button extends Actor {
     private GreenfootImage buttonImage;
+    private OnClick onClick;
 
-    public Button(String path) {
+    public Button(String path, OnClick onClick) {
         this.buttonImage = new GreenfootImage(path);
+        this.onClick = onClick;
         setImage(buttonImage);        
     }
+    
     public void act() {
         // Check for mouse interaction
         if (Greenfoot.mouseClicked(this)) {
             // This is where you would put the code that runs when the button is clicked.
             // For example, you could switch to a different world:
             // Greenfoot.setWorld(new AnotherWorld());
-            
+            onClick.execute();
             // Or you could print a message to the console:
             System.out.println("Button clicked!");
+
         }   
     }
+    public int getWidth() {
+        return buttonImage.getWidth();
+    }   
+    public int getHeight() {
+        return buttonImage.getHeight();
+    }
 }
+interface OnClick {
+    void execute();
+}
+

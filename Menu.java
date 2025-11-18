@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Menu extends World
+public class Menu extends World 
 {
 
     /**
@@ -19,13 +19,28 @@ public class Menu extends World
         super(1600, 900, 1);    
         // make the header, it should not be background its header.png and position it at 800,150, scale it up to 2x
         GreenfootImage header = new GreenfootImage("./images/header.png");
-        getBackground().drawImage(header, 800 - header.getWidth()/2, 200 - header.getHeight()/2);
+        int leftAlign = 800 - header.getWidth()/2;
+        getBackground().drawImage(header, leftAlign, 200 - header.getHeight()/2);
         GreenfootImage headart = new GreenfootImage("./images/head.png");
-        getBackground().drawImage(headart, 1200 - headart.getWidth()/2,  headart.getHeight());
+        getBackground().drawImage(headart, 1600 - headart.getWidth(),  900 - headart.getHeight());
+        class Callback implements OnClick {
+            public void execute() {
+                Greenfoot.setWorld(new MyWorld());
+            }
 
-        Button start = new Button("Play.png");
-        addObject(start, 800, 450);
-        Button about = new Button("About.png");
-        addObject(about, 800, 625);
+        }
+        Button start = new Button("Play.png", new Callback());
+        
+        addObject(start, leftAlign + start.getWidth()/2 , 450);
+
+        class ExitCallback implements OnClick {
+            public void execute() {
+                Greenfoot.stop();
+            }
+
+        }
+
+        Button about = new Button("Exit.png", new ExitCallback());
+        addObject(about, leftAlign + about.getWidth()/2, 560);
     }
 }

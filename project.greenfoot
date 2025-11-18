@@ -1,7 +1,7 @@
 #Greenfoot project file
 class.Button.image=button.png
 class.Pill.image=images.png
-class.Player.image=character.png
+class.Player.image=R1.png
 dependency1.from=Menu
 dependency1.to=Button
 dependency1.type=UsesDependency
@@ -11,12 +11,15 @@ dependency2.type=UsesDependency
 dependency3.from=MyWorld
 dependency3.to=Pill
 dependency3.type=UsesDependency
+dependency4.from=Player
+dependency4.to=Pill
+dependency4.type=UsesDependency
 editor.fx.0.height=740
 editor.fx.0.width=816
 editor.fx.0.x=552
 editor.fx.0.y=97
 height=1048
-package.numDependencies=3
+package.numDependencies=4
 package.numTargets=5
 project.charset=UTF-8
 publish.hasSource=false
