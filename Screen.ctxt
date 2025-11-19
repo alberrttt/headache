@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Screen
+comment1.params=
+comment1.target=Screen()
+comment2.params=top\ bottom\ left\ right
+comment2.target=void\ setAdjacentScreens(Screen,\ Screen,\ Screen,\ Screen)
+comment3.params=actor
+comment3.target=void\ checkActorCollisions(greenfoot.Actor)
+numComments=4

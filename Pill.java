@@ -12,5 +12,9 @@ public class Pill extends Actor
      * Act - do whatever the Pill wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    
+    public void collect() {
+        World world = getWorld();
+        world.removeObject(this);
+        Greenfoot.playSound("./sounds/collect_item.mp3");
+    }
 }

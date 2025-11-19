@@ -25,7 +25,7 @@ public class Menu extends World
         getBackground().drawImage(headart, 1600 - headart.getWidth(),  900 - headart.getHeight());
         class Callback implements OnClick {
             public void execute() {
-                Greenfoot.setWorld(new MyWorld());
+                Greenfoot.setWorld(new GrassWorld());
             }
 
         }
