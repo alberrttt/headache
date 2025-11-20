@@ -26,8 +26,7 @@ public class GrassWorld extends Screen
             this.addObject(pill, x, y);
         }
         setBackground("./images/grass.png");
-        Screen right = new Screen();
-        right.setAdjacentScreens(null, null, this, null);
+        Screen right = new V1World(null, null, this, null);
         this.setAdjacentScreens(null, null, null, right);        
     }
 

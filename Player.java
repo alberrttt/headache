@@ -22,13 +22,14 @@ public class Player extends Actor {
     public String a(String x) {
         return "./images/" + x + ".png";
     }
-
+    public static int width = 75;
+    public static int height = 150;
     public Player() {
 
         String path = a(idle);
         GreenfootImage img = new GreenfootImage(path);
+        img.scale(width, height);
         setImage(img);
-        img.scale(100, 200);
 
     }
 
@@ -64,15 +65,23 @@ public class Player extends Actor {
         }
 
         boolean moved = Math.abs(currentX-getX()) > 0 || Math.abs(currentY - getY()) > 0;
+        int oldX = getX();
+        int oldY = getY();
         setLocation(currentX, currentY);
 
-        if (moved) {
+        boolean blocked = false;
+        if (isTouching(Box.class)) {
+            // revert move when colliding with a Box
+            setLocation(oldX, oldY);
+            blocked = true;
+        }
+
+        if (moved && !blocked) {
             move(dir);
-            
         } else {
             String path = a(idle);
             GreenfootImage img = new GreenfootImage(path);
-            img.scale(100, 200);
+            img.scale(width, height);
 
             setImage(img);
         }
@@ -86,7 +95,7 @@ public class Player extends Actor {
         if (delta % 5 == 0) {
             String path = a(paths[current]);
             GreenfootImage img = new GreenfootImage(path);
-            img.scale(100, 200);
+            img.scale(width, height);
             if (dir == Direction.LEFT) {
                 img.mirrorHorizontally();
             }
@@ -94,7 +103,6 @@ public class Player extends Actor {
 
             current = (current + 1) % paths.length;
         }
-        ((Screen)getWorld()).checkActorCollisions(this);
         
         if (isTouching(Pill.class))
         {
@@ -103,5 +111,7 @@ public class Player extends Actor {
                 pill.collect();
             }
         }
+        ((Screen)getWorld()).checkActorCollisions(this);
+
     }
 }
