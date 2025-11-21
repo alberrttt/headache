@@ -24,7 +24,6 @@ class Button extends Actor {
             // Greenfoot.setWorld(new AnotherWorld());
             onClick.execute();
             // Or you could print a message to the console:
-            System.out.println("Button clicked!");
 
         }   
     }

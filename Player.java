@@ -24,14 +24,18 @@ public class Player extends Actor {
     }
     public static int width = 75;
     public static int height = 150;
-    public Player() {
-
+    public Healthbar hb;
+    public Player(Healthbar hb) {
+        this.hb = hb;
         String path = a(idle);
         GreenfootImage img = new GreenfootImage(path);
         img.scale(width, height);
         setImage(img);
 
+
     }
+
+
 
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
@@ -68,6 +72,7 @@ public class Player extends Actor {
         int oldX = getX();
         int oldY = getY();
         setLocation(currentX, currentY);
+        this.hb.setLocation(currentX, currentY-100);
 
         boolean blocked = false;
         if (isTouching(Box.class)) {
@@ -77,7 +82,10 @@ public class Player extends Actor {
         }
 
         if (moved && !blocked) {
+
             move(dir);
+            ((Screen)getWorld()).checkActorCollisions(this);
+
         } else {
             String path = a(idle);
             GreenfootImage img = new GreenfootImage(path);
@@ -88,9 +96,11 @@ public class Player extends Actor {
         facing = dir;
 
     }
+    public void placeInNewScreen() {
 
+    }
     public void move(Direction dir) {
-
+        
         delta += 1;
         if (delta % 5 == 0) {
             String path = a(paths[current]);
@@ -111,7 +121,6 @@ public class Player extends Actor {
                 pill.collect();
             }
         }
-        ((Screen)getWorld()).checkActorCollisions(this);
 
     }
 }
