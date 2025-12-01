@@ -22,9 +22,16 @@ public class Screen extends World {
         this.left = left;
         this.right = right;
     }
+    public void act() {
+        
+        if (player != null) {
+            player.placeInNewScreen();
+        }
+    }
     
-    
-
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
     public boolean checkActorCollisions(Actor actor) {
         int aX = actor.getX();
         int aY = actor.getY();
@@ -38,7 +45,6 @@ public class Screen extends World {
         } else if (aX >= getWidth() - 1 && right != null) {
             Greenfoot.setWorld(right);
 
-            this.removeObject(actor);
             actor.setLocation(0, aY);
             right.addObject(actor, 0, aY);
             ((Player)actor).placeInNewScreen();

@@ -16,9 +16,8 @@ public class GrassWorld extends Screen
     public GrassWorld()
     {    
         super();
-        Healthbar hb = new Healthbar();
-        this.addObject(hb, 1450, 800);
-        Actor player = new Player(hb);
+      
+        Player player = new Player();
         this.addObject(player, getWidth()/2, getCellSize()/2);
         int medicines = 10;
         for (int i = 0; i < medicines; i ++) {
@@ -31,7 +30,8 @@ public class GrassWorld extends Screen
         Screen right = new V1World(null, null, this, null);
         this.setAdjacentScreens(null, null, null, right);        
     }
-
+    
     public static void main(String[] args) {
     }
+
 }

@@ -2,8 +2,12 @@
 comment0.target=Screen
 comment1.params=
 comment1.target=Screen()
-comment2.params=top\ bottom\ left\ right
-comment2.target=void\ setAdjacentScreens(Screen,\ Screen,\ Screen,\ Screen)
-comment3.params=actor
-comment3.target=void\ checkActorCollisions(greenfoot.Actor)
-numComments=4
+comment2.params=player
+comment2.target=Screen(Player)
+comment3.params=top\ bottom\ left\ right
+comment3.target=void\ setAdjacentScreens(Screen,\ Screen,\ Screen,\ Screen)
+comment4.params=
+comment4.target=void\ act()
+comment5.params=actor
+comment5.target=boolean\ checkActorCollisions(greenfoot.Actor)
+numComments=6

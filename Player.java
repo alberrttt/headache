@@ -22,10 +22,14 @@ public class Player extends Actor {
     public String a(String x) {
         return "./images/" + x + ".png";
     }
+    public static GreenfootSound sound = new GreenfootSound("./grass_sound.mp3");;
     public static int width = 75;
     public static int height = 150;
     public Healthbar hb;
-    public Player(Healthbar hb) {
+    public double health = 100.0;
+    public double maxHealth = 100.0;
+    public Player() {
+        Healthbar hb = new Healthbar(this);
         this.hb = hb;
         String path = a(idle);
         GreenfootImage img = new GreenfootImage(path);
@@ -46,6 +50,7 @@ public class Player extends Actor {
         int currentX = getX();
         int currentY = getY();
         int mov = 5;
+
 
         Direction dir = null;
         if (Greenfoot.isKeyDown("w")) {
@@ -72,7 +77,6 @@ public class Player extends Actor {
         int oldX = getX();
         int oldY = getY();
         setLocation(currentX, currentY);
-        this.hb.setLocation(currentX, currentY-100);
 
         boolean blocked = false;
         if (isTouching(Box.class)) {
@@ -97,7 +101,10 @@ public class Player extends Actor {
 
     }
     public void placeInNewScreen() {
-
+        Screen screen = (Screen) getWorld();
+        screen.addObject(hb, 0, 0);
+      
+        hb.placeInNewScreen();
     }
     public void move(Direction dir) {
         
