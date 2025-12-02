@@ -12,42 +12,43 @@ public class Healthbar extends Actor
      * Act - do whatever the Healthbar wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    GreenfootImage healthbarEmpty;
-    GreenfootImage healthbarColor;
+    GreenfootImage main;
+    GreenfootImage secondary;
     Player player;
     public Healthbar(Player player)
     {
         // create rect
         this.player = player;
+        main = new GreenfootImage(310, 70);
+        main.setColor(new greenfoot.Color(0, 255, 0));
+        main.fillRect(0, 17, 0, 42);
+        drawBorder();
         
-        GreenfootImage img = new GreenfootImage("./images/healthbar_empty.png");
-        img.scale(300, 70);
-        this.healthbarEmpty = img;
-        GreenfootImage  rect = new GreenfootImage(1, 40);
-        
-        rect.setColor(new greenfoot.Color(0, 255, 0));
-        rect.fill();
-        this.healthbarColor = rect;
-        img.drawImage(healthbarColor,0,0);
-        
-        setImage(img);
+        setImage(main);
 
     }
-
+    public void drawBorder() {
+        GreenfootImage border = new GreenfootImage("./images/healthbar_empty.png");
+        border.scale(310, 60);
+        main.drawImage(border, 0,0 );       
+        secondary = border; 
+    }
     public void placeInNewScreen() {
         Screen screen = (Screen) getWorld();
         
-        setLocation(healthbarEmpty.getWidth(), screen.getHeight() - healthbarEmpty.getHeight() - 10);
+        setLocation(50+main.getWidth()/2, screen.getHeight() - main.getHeight() - 10);
     }
     public void act()
     {
         // Add your action code here.
     }
     public void update() {
-        healthbarColor.scale((int)(3* hbPercentage()), 40);
-        healthbarEmpty.drawImage(healthbarColor, 0, 0);
+        main.clear();
+        main.fillRect(0, 17, (int)(hbPercentage() * 310), 42);
+        drawBorder();
     }
+
     public double hbPercentage() {
-        return (double) player.health / player.maxHealth;
+        return (double) player.charges / player.maxCharges;
     }
 }

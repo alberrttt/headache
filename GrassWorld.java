@@ -19,9 +19,10 @@ public class GrassWorld extends Screen
       
         Player player = new Player();
         this.addObject(player, getWidth()/2, getCellSize()/2);
+        player.placeInNewScreen();
         int medicines = 10;
         for (int i = 0; i < medicines; i ++) {
-            Actor pill = new Pill();
+            Actor pill = new Pill(player);
             int x = (int)(Math.random()*getWidth());
             int y = (int)(Math.random()*getHeight());
             this.addObject(pill, x, y);

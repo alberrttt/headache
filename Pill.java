@@ -17,8 +17,9 @@ import java.util.*;
 public class Pill extends Actor {
     static final String[] imgs = { "whitetablet", "yellow tablet" };
     String medicine;
-
-    public Pill() {
+    Player plr;
+    public Pill(Player player) {
+        this.plr = player;
         int imgIndex = (int) (Math.random() * imgs.length);
         String imgName = imgs[imgIndex];
         String path = "./images/pills/" + imgName + ".png";
@@ -34,13 +35,16 @@ public class Pill extends Actor {
     public void collect() {
         World world = getWorld();
         world.removeObject(this);
+        // correct();
+        plr.sound.stop();
         doOrganicChemQuiz();
 
     }
 
     public void correct() {
         Greenfoot.playSound("./sounds/collect_item.mp3");
-
+        plr.charges += 1;
+        plr.hb.update();
     }
 
     public void incorrect() {

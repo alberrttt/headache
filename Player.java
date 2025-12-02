@@ -22,12 +22,12 @@ public class Player extends Actor {
     public String a(String x) {
         return "./images/" + x + ".png";
     }
-    public static GreenfootSound sound = new GreenfootSound("./grass_sound.mp3");;
+    public static GreenfootSound sound = new GreenfootSound("./sounds/walking.mp3");;
     public static int width = 75;
     public static int height = 150;
     public Healthbar hb;
-    public double health = 100.0;
-    public double maxHealth = 100.0;
+    public double charges = 0.0;
+    public double maxCharges = 10.0;
     public Player() {
         Healthbar hb = new Healthbar(this);
         this.hb = hb;
@@ -39,8 +39,22 @@ public class Player extends Actor {
 
     }
 
+    public void shoot() {
+        MouseInfo m = Greenfoot.getMouseInfo();
+        if ( charges > 0) {
+            charges -= 1;
+            hb.update();
+        } else {
+            return;
+        }
+        int x = m.getX();
+        int y = m.getY();
+        double angle = Math.atan2(y - getY() + 50, x - getX());
+        Bullet b = new Bullet(angle);
+        Screen screen = (Screen) getWorld();
+        screen.addObject(b, getX(), getY()-50);
 
-
+    }
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -53,6 +67,10 @@ public class Player extends Actor {
 
 
         Direction dir = null;
+
+        if ( Greenfoot.mousePressed(null)) {
+            shoot();
+        }
         if (Greenfoot.isKeyDown("w")) {
             currentY -= mov;
             dir = Direction.UP;
@@ -72,12 +90,17 @@ public class Player extends Actor {
             currentX += mov;
             dir = Direction.RIGHT;
         }
-
+        
         boolean moved = Math.abs(currentX-getX()) > 0 || Math.abs(currentY - getY()) > 0;
         int oldX = getX();
         int oldY = getY();
         setLocation(currentX, currentY);
-
+        if (moved) {
+            if (!sound.isPlaying())
+                sound.playLoop();
+        } else {
+            sound.stop();
+        }
         boolean blocked = false;
         if (isTouching(Box.class)) {
             // revert move when colliding with a Box
