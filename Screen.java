@@ -1,3 +1,6 @@
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import greenfoot.Actor;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
@@ -32,15 +35,25 @@ public class Screen extends World {
     public void setPlayer(Player player) {
         this.player = player;
     }
+ 
     public boolean checkActorCollisions(Actor actor) {
         int aX = actor.getX();
         int aY = actor.getY();
-
+        if (!player.canMoveOn && (aX <= 0 || aX >= getWidth() - 1 || aY <= 0 || aY >= getHeight() - 1)) {
+             JOptionPane.showMessageDialog(new JPanel(),
+                "You need to collect all the pills before proceeding to the next area!",
+                "Cannot Proceed",
+                JOptionPane.WARNING_MESSAGE);
+            // tell the player they need to collect all the pills using a dialog box
+            
+            // return false;
+        }
         if (aX <= 0 && left != null) {
             left.addObject(actor, left.getWidth() - 1, aY);
             this.removeObject(actor);
             Greenfoot.setWorld(left);
             ((Player)actor).placeInNewScreen();
+            
             return true;
         } else if (aX >= getWidth() - 1 && right != null) {
             Greenfoot.setWorld(right);

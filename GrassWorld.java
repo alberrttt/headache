@@ -18,7 +18,7 @@ public class GrassWorld extends Screen
         super();
       
         Player player = new Player();
-        this.addObject(player, getWidth()/2, getCellSize()/2);
+        this.addObject(player, getWidth()/2, getHeight()/2);
         player.placeInNewScreen();
         int medicines = 10;
         for (int i = 0; i < medicines; i ++) {
@@ -28,7 +28,9 @@ public class GrassWorld extends Screen
             this.addObject(pill, x, y);
         }
         setBackground("./images/grass.png");
-        Screen right = new V1World(null, null, this, null);
+        
+        Screen right = new V1World(player, null, null, this, null);
+        this.player = player;
         this.setAdjacentScreens(null, null, null, right);        
     }
     

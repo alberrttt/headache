@@ -20,6 +20,7 @@ public class Bullet  extends Actor
         img.scale(20, 20);
         setImage(img);
         setRotation((int)(angle*180/Math.PI));
+        Greenfoot.playSound("./sounds/laser-312360.mp3");
     }
 
     public void act() {

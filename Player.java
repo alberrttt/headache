@@ -22,12 +22,13 @@ public class Player extends Actor {
     public String a(String x) {
         return "./images/" + x + ".png";
     }
+    public boolean canMoveOn = false;
     public static GreenfootSound sound = new GreenfootSound("./sounds/walking.mp3");;
     public static int width = 75;
     public static int height = 150;
     public Healthbar hb;
     public double charges = 0.0;
-    public double maxCharges = 10.0;
+    public double maxCharges = 20.0;
     public Player() {
         Healthbar hb = new Healthbar(this);
         this.hb = hb;
@@ -97,7 +98,12 @@ public class Player extends Actor {
         setLocation(currentX, currentY);
         if (moved) {
             if (!sound.isPlaying())
-                sound.playLoop();
+                try {
+                    sound.playLoop();
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    System.out.println("Sound error");
+                }
         } else {
             sound.stop();
         }

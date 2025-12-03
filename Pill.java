@@ -43,12 +43,16 @@ public class Pill extends Actor {
 
     public void correct() {
         Greenfoot.playSound("./sounds/collect_item.mp3");
-        plr.charges += 1;
+        plr.charges += 5;
         plr.hb.update();
+        if (plr.charges >= plr.maxCharges) {
+            plr.charges = plr.maxCharges;
+            plr.canMoveOn = true;
+        }
     }
 
     public void incorrect() {
-
+        plr.charges += 2;
     }
 
     static final Quiz[] quizes = { new Quiz("./images/organic/acetaminophen.png",
