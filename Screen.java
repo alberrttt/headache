@@ -19,6 +19,7 @@ public class Screen extends World {
         super(1600, 900, 1);
         this.player = player;
     }
+    public void after() {}
     public void setAdjacentScreens(Screen top, Screen bottom, Screen left, Screen right) {
         this.top = top;
         this.bottom = bottom;

@@ -27,7 +27,7 @@ public class Player extends Actor {
     public static int width = 75;
     public static int height = 150;
     public Healthbar hb;
-    public double charges = 0.0;
+    public double charges = 20.0;
     public double maxCharges = 20.0;
     public Player() {
         Healthbar hb = new Healthbar(this);
@@ -42,6 +42,10 @@ public class Player extends Actor {
 
     public void shoot() {
         MouseInfo m = Greenfoot.getMouseInfo();
+        if (m == null) {
+            System.out.println("MouseInfo is null");    
+            return;
+        }
         if ( charges > 0) {
             charges -= 1;
             hb.update();
@@ -68,7 +72,7 @@ public class Player extends Actor {
 
 
         Direction dir = null;
-
+        
         if ( Greenfoot.mousePressed(null)) {
             shoot();
         }

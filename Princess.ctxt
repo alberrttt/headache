@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Princess
+comment1.params=
+comment1.target=Princess()
+comment2.params=
+comment2.target=void\ init()
+comment3.params=
+comment3.target=void\ onDeath()
+comment4.params=
+comment4.target=void\ onHit()
+comment5.params=
+comment5.target=void\ act()
+comment6.params=
+comment6.target=void\ updateLaser()
+comment7.params=
+comment7.target=void\ castLaser()
+numComments=8

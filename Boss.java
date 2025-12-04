@@ -10,11 +10,17 @@ public class Boss extends Actor {
             onHit();
         }
         if (health <= 0) {
+            onDeath();
             getWorld().removeObject(this);
+
         }
     }
     public void init() {}
-    public void onHit() {}
+    public void onDeath() {
+    }
+    public void onHit() {
+        System.out.println("Boss hit! Health: " + this.health);
+    }
     public Boss(String img) {
         super();
         resetImg(); 
