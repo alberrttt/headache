@@ -1,5 +1,6 @@
 import greenfoot.*;
 public class SweepingLaser extends Actor {
+    
     public SweepingLaser() {
         // create a red box
         GreenfootImage img = new GreenfootImage(900, 5);

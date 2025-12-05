@@ -14,6 +14,7 @@ enum Direction {
  * @version (a version number or a date)
  */
 public class Player extends Actor {
+    static Player instance = null;
     static final String[] paths = { "R2", "R3", "R4" };
     public int current = 0;
     public int delta = 0;
@@ -22,13 +23,14 @@ public class Player extends Actor {
     public String a(String x) {
         return "./images/" + x + ".png";
     }
-    public boolean canMoveOn = false;
     public static GreenfootSound sound = new GreenfootSound("./sounds/walking.mp3");;
     public static int width = 75;
     public static int height = 150;
     public Healthbar hb;
     public double charges = 20.0;
     public double maxCharges = 20.0;
+    public double defeatedBosses = 0;
+    public int coins = 0;
     public Player() {
         Healthbar hb = new Healthbar(this);
         this.hb = hb;
@@ -37,9 +39,15 @@ public class Player extends Actor {
         img.scale(width, height);
         setImage(img);
 
-
+        instance = this;
     }
-
+    public void incCharges(double amt) {
+        this.charges += amt;
+        if (this.charges > this.maxCharges) {
+            this.charges = this.maxCharges;
+        }
+        hb.update();
+    }
     public void shoot() {
         MouseInfo m = Greenfoot.getMouseInfo();
         if (m == null) {
@@ -60,6 +68,12 @@ public class Player extends Actor {
         screen.addObject(b, getX(), getY()-50);
 
     }
+    public void kill() {
+        Dead dead = new Dead();
+        Greenfoot.setWorld(dead);
+        sound.stop();
+        Greenfoot.playSound("./sounds/dead.mp3");
+    }
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -72,7 +86,12 @@ public class Player extends Actor {
 
 
         Direction dir = null;
-        
+        if (isTouching(Coin.class)) {
+            ArrayList<Coin> coins = (ArrayList<Coin>) getIntersectingObjects(Coin.class);
+            for (Coin coin : coins) {
+                coin.collect();
+            }
+        }
         if ( Greenfoot.mousePressed(null)) {
             shoot();
         }
@@ -131,7 +150,9 @@ public class Player extends Actor {
             setImage(img);
         }
         facing = dir;
-
+        if(isTouching(SweepingLaser.class)) {
+            kill();
+        }
     }
     public void placeInNewScreen() {
         Screen screen = (Screen) getWorld();

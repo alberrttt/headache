@@ -23,9 +23,21 @@ public class GrassWorld extends Screen
         int medicines = 10;
         for (int i = 0; i < medicines; i ++) {
             Actor pill = new Pill(player);
-            int x = (int)(Math.random()*getWidth());
-            int y = (int)(Math.random()*getHeight());
-            this.addObject(pill, x, y);
+            // make them spawn in the area that is not 250x250 from center
+            int x, y;
+            boolean validLocation = false;
+            while (!validLocation) {
+                x = Greenfoot.getRandomNumber(getWidth());
+                y = Greenfoot.getRandomNumber(getHeight());
+                // Check if outside the 250x250 center area
+                int centerX = getWidth() / 2;
+                int centerY = getHeight() / 2;
+                int threshold = 125; // 250/2
+                if (Math.abs(x - centerX) > threshold || Math.abs(y - centerY) > threshold) {
+                    validLocation = true;
+                    this.addObject(pill, x, y);
+                }
+            }
         }
         setBackground("./images/grass.png");
         

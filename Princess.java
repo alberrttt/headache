@@ -1,4 +1,7 @@
 import greenfoot.*;
+import greenfoot.sound.Sound;
+import greenfoot.sound.SoundFactory;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.RGBImageFilter;
 public class Princess extends Boss {
@@ -8,7 +11,7 @@ public class Princess extends Boss {
     public boolean laserCasted = false;
     public Princess() {
         super("./images/princess.png");
-        this.health = 5;
+        this.health = 10;
 
     }
     public void init() {
@@ -20,13 +23,21 @@ public class Princess extends Boss {
         Screen world = (Screen) getWorld();
             world.removeObject(laser);
         // world.player.canMoveOn = true;
+        Sound sound = SoundFactory.getInstance().createSound("./sounds/yay.mp3", false);
+        if (sound != null) {
+            sound.play();
+        }
+        fade();
+        world.player.defeatedBosses += 1;
+        Coin coin = new Coin();
+        world.addObject(coin, getX(), getY());
+
     }
     @Override
     public void onHit() {
         flashRed();
         Greenfoot.delay(2);
         resetImg();
-        System.out.println("Princess hit! Health: " + this.health);
         
     }
     public void act() {

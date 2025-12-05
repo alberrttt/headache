@@ -43,12 +43,8 @@ public class Pill extends Actor {
 
     public void correct() {
         Greenfoot.playSound("./sounds/collect_item.mp3");
-        plr.charges += 5;
-        plr.hb.update();
-        if (plr.charges >= plr.maxCharges) {
-            plr.charges = plr.maxCharges;
-            plr.canMoveOn = true;
-        }
+        plr.incCharges(5);
+        
     }
 
     public void incorrect() {
@@ -82,7 +78,30 @@ public class Pill extends Actor {
 
                 }
                 , 4
-            )
+            ),
+
+            new Quiz("./images/question.png", "Which of the following compounds is aromatic?",
+                new String[] {
+                    "Cyclohexane",
+                    "Cyclobutadiene",
+                    "Benzene",
+                    "1,3-Butadiene",
+                    "Cyclooctatetraene",
+
+                }
+                , 2
+            ),
+            new Quiz("./images/question.png", "What is the hybridization of the carbon atoms in ethene (C2H4)?",
+                new String[] {
+                    "sp3",
+                    "sp2",
+                    "sp",
+                    "s",
+                    "d",
+
+                }
+                , 1
+            ),
     };
 
     public void doOrganicChemQuiz() {

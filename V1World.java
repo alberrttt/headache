@@ -26,7 +26,7 @@ public class V1World extends Screen {
         Princess princess = new Princess();
         addObject(princess, getWidth() / 2, getHeight() / 2);
         princess.init();
-
+        this.right = new CannonWorld(this, null, null, null);
     }
  
 }
