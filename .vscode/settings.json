@@ -3,7 +3,6 @@
         "."
     ],
     "java.project.referencedLibraries": [
-        "c:\\Program Files\\Greenfoot\\lib\\greenfoot.jar",
-        "c:\\Program Files\\Greenfoot\\lib\\bluej.jar"
+        "c:\\Users\\albert\\Downloads\\Greenfoot-windows-390\\greenfoot\\lib\\greenfoot.jar"
     ]
 }

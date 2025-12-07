@@ -17,9 +17,8 @@ import java.util.*;
 public class Pill extends Actor {
     static final String[] imgs = { "whitetablet", "yellow tablet" };
     String medicine;
-    Player plr;
-    public Pill(Player player) {
-        this.plr = player;
+
+    public Pill() {
         int imgIndex = (int) (Math.random() * imgs.length);
         String imgName = imgs[imgIndex];
         String path = "./images/pills/" + imgName + ".png";
@@ -36,19 +35,19 @@ public class Pill extends Actor {
         World world = getWorld();
         world.removeObject(this);
         // correct();
-        plr.sound.stop();
+        Screen.currentScreen.walkingSound.stop();
         doOrganicChemQuiz();
 
     }
 
     public void correct() {
         Greenfoot.playSound("./sounds/collect_item.mp3");
-        plr.incCharges(5);
-        
+        Player.instance.incCharges(5);
+
     }
 
     public void incorrect() {
-        plr.charges += 2;
+        Player.instance.charges += 2;
     }
 
     static final Quiz[] quizes = { new Quiz("./images/organic/acetaminophen.png",
@@ -57,51 +56,43 @@ public class Pill extends Actor {
             0),
 
             new Quiz("./images/organic/salicyclic.png", "What functional groups are present?",
-                new String[] {
-                    "Ester and alcohol",
+                    new String[] {
+                            "Ester and alcohol",
 
-                    "Carboxylic acid and phenol",
-                    "Aldehyde and phenol",
-                    "Ketone and carboxylic acid",
-                    "Alcohol and ether"
-                }
-                , 1
-            ),
+                            "Carboxylic acid and phenol",
+                            "Aldehyde and phenol",
+                            "Ketone and carboxylic acid",
+                            "Alcohol and ether"
+                    }, 1),
 
             new Quiz("./images/organic/cysteine.png", "What amino acid is this?",
-                new String[] {
-                    "Methionine",
-                    "Serine",
-                    "Threonine",
-                    "Tyrosine",
-                    "Cysteine",
+                    new String[] {
+                            "Methionine",
+                            "Serine",
+                            "Threonine",
+                            "Tyrosine",
+                            "Cysteine",
 
-                }
-                , 4
-            ),
+                    }, 4),
 
             new Quiz("./images/question.png", "Which of the following compounds is aromatic?",
-                new String[] {
-                    "Cyclohexane",
-                    "Cyclobutadiene",
-                    "Benzene",
-                    "1,3-Butadiene",
-                    "Cyclooctatetraene",
+                    new String[] {
+                            "Cyclohexane",
+                            "Cyclobutadiene",
+                            "Benzene",
+                            "1,3-Butadiene",
+                            "Cyclooctatetraene",
 
-                }
-                , 2
-            ),
+                    }, 2),
             new Quiz("./images/question.png", "What is the hybridization of the carbon atoms in ethene (C2H4)?",
-                new String[] {
-                    "sp3",
-                    "sp2",
-                    "sp",
-                    "s",
-                    "d",
+                    new String[] {
+                            "sp3",
+                            "sp2",
+                            "sp",
+                            "s",
+                            "d",
 
-                }
-                , 1
-            ),
+                    }, 1),
     };
 
     public void doOrganicChemQuiz() {
@@ -114,23 +105,25 @@ public class Pill extends Actor {
         String[] origOptions = quiz.options;
         int n = origOptions.length;
         ArrayList<Integer> indices = new ArrayList<Integer>(n);
-        for (int i = 0; i < n; i++) indices.add(i);
+        for (int i = 0; i < n; i++)
+            indices.add(i);
         Collections.shuffle(indices);
         String[] shuffled = new String[n];
         int mappedAnswerIndex = -1;
         for (int i = 0; i < n; i++) {
             int origIdx = indices.get(i);
             shuffled[i] = origOptions[origIdx];
-            if (origIdx == quiz.answerIndex) mappedAnswerIndex = i;
+            if (origIdx == quiz.answerIndex)
+                mappedAnswerIndex = i;
         }
 
         int opt = JOptionPane.showOptionDialog(null, quiz.question,
-            "Organic Chemistry Quiz",
-            JOptionPane.DEFAULT_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            icon,
-            shuffled,
-            null);
+                "Organic Chemistry Quiz",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                icon,
+                shuffled,
+                null);
         // String userInput = JOptionPane.showInputDialog(
         // null,
         // quiz.question + "\n\n" + optionsBuilder.toString(),

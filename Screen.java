@@ -1,9 +1,13 @@
+import java.io.Console;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import greenfoot.Actor;
+import greenfoot.Color;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
+import greenfoot.GreenfootSound;
 import greenfoot.World;
 
 public class Screen extends World {
@@ -11,65 +15,106 @@ public class Screen extends World {
     public Screen top;
     public Screen left;
     public Screen right;
+    public GreenfootSound walkingSound = new GreenfootSound("./sounds/walking.wav");
+    public static Screen currentScreen = null;
+    public boolean mayLeave = false;
+
     public Screen() {
         super(1600, 900, 1);
+        addObject(new ActCounter(), 50, 50);
     }
-    public Player player;
-    public Screen(Player player) {
-        super(1600, 900, 1);
-        this.player = player;
+
+    public void after() {
     }
-    public void after() {}
+
     public void setAdjacentScreens(Screen top, Screen bottom, Screen left, Screen right) {
         this.top = top;
         this.bottom = bottom;
         this.left = left;
         this.right = right;
     }
-    public void act() {
-        
-        if (player != null) {
-            player.placeInNewScreen();
-        }
-    }
-    
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
+
     public boolean canMoveOn() {
         return true;
     }
-    public boolean checkActorCollisions(Actor actor) {
-        int aX = actor.getX();
-        int aY = actor.getY();
+
+    public void fadeOutScreen() {
+        GreenfootImage fade = new GreenfootImage(getWidth(), getHeight());
+        fade.setColor(Color.BLACK);
+        class Fade extends Actor {
+            public Fade() {
+                setImage(fade);
+            }
+        }
+        Fade fadeActor = new Fade();
+        addObject(fadeActor, getWidth() / 2, getHeight() / 2);
+
+        for (int alpha = 0; alpha <= 255; alpha += 10) {
+            fade.clear();
+
+            fade.setColor(new Color(0, 0, 0, alpha));
+            fade.fill();
+            fadeActor.setImage(fade);
+            Greenfoot.delay(1);
+        }
+        removeObject(fadeActor);
+    }
+
+    public void fadeInScreen(Screen newScreen) {
+        GreenfootImage fade = new GreenfootImage(getWidth(), getHeight());
+        fade.setColor(Color.BLACK);
+        fade.fill();
+        class Fade extends Actor {
+            public Fade() {
+                setImage(fade);
+            }
+        }
+        Fade fadeActor = new Fade();
+        newScreen.addObject(fadeActor, getWidth() / 2, getHeight() / 2);
+        for (int alpha = 255; alpha >= 0; alpha -= 10) {
+            fade.clear();
+
+            fade.setColor(new Color(0, 0, 0, alpha));
+            fade.fill();
+            fadeActor.setImage(fade);
+            Greenfoot.delay(1);
+        }
+        removeObject(fadeActor);
+    }
+
+    public void changeScreen(Screen newScreen, int x, int y) {
+        Player player = Player.instance;
+        player.stopSounds();
+        newScreen.addObject(player, x, y);
+        fadeOutScreen();
+        Greenfoot.setWorld(newScreen);
+        fadeInScreen(newScreen);
+        currentScreen = newScreen;
+        newScreen.after();
+        player.afterAdded();
+    }
+
+    public boolean checkPlayerCollisions() {
+        Player player = Player.instance;
+        int aX = player.getX();
+        int aY = player.getY();
+        if (!mayLeave)
+            return false;
         if (!canMoveOn()) {
             return false;
         }
         if (aX <= 0 && left != null) {
-            left.addObject(actor, left.getWidth() - 1, aY);
-            this.removeObject(actor);
-            Greenfoot.setWorld(left);
-            ((Player)actor).placeInNewScreen();
-            
+            changeScreen(left, left.getWidth() - 10, aY);
+
             return true;
         } else if (aX >= getWidth() - 1 && right != null) {
-            Greenfoot.setWorld(right);
-
-            actor.setLocation(0, aY);
-            right.addObject(actor, 0, aY);
-            ((Player)actor).placeInNewScreen();
+            changeScreen(right, 10, aY);
             return true;
         } else if (aY <= 0 && top != null) {
-            top.addObject(actor, aX, top.getHeight() - 1);
-            this.removeObject(actor);
-            Greenfoot.setWorld(top);
-            ((Player)actor).placeInNewScreen();
+            changeScreen(top, aX, top.getHeight() - 10);
             return true;
         } else if (aY >= getHeight() - 1 && bottom != null) {
-            bottom.addObject(actor, aX, 0);
-            this.removeObject(actor);
-            Greenfoot.setWorld(bottom);
-            ((Player)actor).placeInNewScreen();
+            changeScreen(bottom, aX, 10);
             return true;
         }
         return false;

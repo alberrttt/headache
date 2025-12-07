@@ -10,5 +10,5 @@ comment4.params=
 comment4.target=void\ rotateOne()
 comment5.params=angle\ aboutX\ aboutY
 comment5.target=void\ setRotation(double,\ int,\ int)
-comment5.text=\r\n\ Sets\ the\ rotation\ of\ the\ laser\ and\ updates\ its\ position\ accordingly.\r\n\ @param\ angle\ The\ angle\ in\ degrees\ to\ set\ the\ rotation\ to.\ in\ radians\r\n
+comment5.text=\r\n\ Sets\ the\ rotation\ of\ the\ laser\ and\ updates\ its\ position\ accordingly.\r\n\ \r\n\ @param\ angle\ The\ angle\ in\ degrees\ to\ set\ the\ rotation\ to.\ in\ radians\r\n
 numComments=6

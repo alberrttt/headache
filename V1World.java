@@ -1,32 +1,40 @@
-import greenfoot.   *;
+import greenfoot.*;
+
 public class V1World extends Screen {
-    public V1World(Player plr, Screen top, Screen bottom, Screen left, Screen right) {
+    public V1World(Screen top, Screen bottom, Screen left, Screen right) {
         super();
-        this.player = plr;
-        
-        this.setAdjacentScreens(top, bottom, left, right);      
+
+        this.setAdjacentScreens(top, bottom, left, right);
         init();
     }
-    
 
     public V1World() {
         super();
-        this.player = new Player();
-        this.addObject(player, getWidth()/2, getHeight()/2);
-        player.placeInNewScreen();
+        this.addObject(Player.getInstance(), 0, getHeight() / 2);
+        Screen.currentScreen = this;
+        Player.getInstance().afterAdded();
         init();
     }
-    public void after() {
-        player.placeInNewScreen();
 
+    public void after() {
     }
+
+    static GreenfootImage[] treeImages = {
+            new GreenfootImage("./images/tree0.png"),
+            new GreenfootImage("./images/tree1.png"),
+            new GreenfootImage("./images/tree2.png"),
+            new GreenfootImage("./images/tree3.png"),
+    };
+
     public void init() {
         setBackground("./images/grass.png");
+
+        // Spawn random trees
 
         Princess princess = new Princess();
         addObject(princess, getWidth() / 2, getHeight() / 2);
         princess.init();
         this.right = new CannonWorld(this, null, null, null);
     }
- 
+
 }

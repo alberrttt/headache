@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=Cannoneer
+comment1.params=
+comment1.target=greenfoot.GreenfootImage\ getBossImage()
+comment2.params=
+comment2.target=Cannoneer()
+comment3.params=
+comment3.target=void\ act()
+comment4.params=
+comment4.target=void\ init()
+comment5.params=
+comment5.target=void\ onDeath()
+comment6.params=
+comment6.target=void\ onHit()
+numComments=7

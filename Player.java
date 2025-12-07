@@ -1,39 +1,87 @@
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 import greenfoot.*; // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
 enum Direction {
     UP,
     RIGHT,
     DOWN,
     LEFT
 }
+
 /**
  * Write a description of class Player here.
  * 
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Player extends Actor {
+public class Player extends Actor implements AfterAdded {
     static Player instance = null;
-    static final String[] paths = { "R2", "R3", "R4" };
+
+    static Player getInstance() {
+        if (instance == null) {
+            instance = new Player();
+        }
+        return instance;
+    }
+
     public int current = 0;
     public int delta = 0;
     static final String idle = "R1";
-    public Direction facing = Direction.LEFT;
+
     public String a(String x) {
         return "./images/" + x + ".png";
     }
-    public static GreenfootSound sound = new GreenfootSound("./sounds/walking.mp3");;
+
     public static int width = 75;
     public static int height = 150;
-    public Healthbar hb;
+    static final String[] paths = { "R2", "R3", "R4" };
+    static final GreenfootImage[] runFramesRight = new GreenfootImage[paths.length];
+    static final GreenfootImage[] runFramesLeft = new GreenfootImage[paths.length];
+
+    static final GreenfootImage idleImg = new GreenfootImage("./images/" + idle + ".png");
+    static {
+        for (int i = 0; i < paths.length; i++) {
+            String path = "./images/" + paths[i] + ".png";
+            GreenfootImage img = new GreenfootImage(path);
+            img.scale(Player.width, Player.height);
+            runFramesRight[i] = img;
+        }
+        for (int i = 0; i < paths.length; i++) {
+            String path = "./images/" + paths[i] + ".png";
+            GreenfootImage img = new GreenfootImage(path);
+            img.mirrorHorizontally();
+            img.scale(Player.width, Player.height);
+            runFramesLeft[i] = img;
+        }
+    }
     public double charges = 20.0;
     public double maxCharges = 20.0;
     public double defeatedBosses = 0;
+    public int health = 3;
+    public int maxHealth = 5;
+
+    public void incHealth(int amt) {
+        this.health += amt;
+        if (this.health > this.maxHealth) {
+            this.health = this.maxHealth;
+        }
+        StatsUI.instance.hearts.update();
+    }
+
     public int coins = 0;
+    static Powerbar pb = StatsUI.instance.powerbar;
+
+    public void stopSounds() {
+        Screen.currentScreen.walkingSound.stop();
+    }
+
     public Player() {
-        Healthbar hb = new Healthbar(this);
-        this.hb = hb;
         String path = a(idle);
         GreenfootImage img = new GreenfootImage(path);
         img.scale(width, height);
@@ -41,22 +89,23 @@ public class Player extends Actor {
 
         instance = this;
     }
+
     public void incCharges(double amt) {
         this.charges += amt;
         if (this.charges > this.maxCharges) {
             this.charges = this.maxCharges;
         }
-        hb.update();
+        pb.update();
     }
+
     public void shoot() {
         MouseInfo m = Greenfoot.getMouseInfo();
         if (m == null) {
-            System.out.println("MouseInfo is null");    
             return;
         }
-        if ( charges > 0) {
+        if (charges > 0) {
             charges -= 1;
-            hb.update();
+            StatsUI.instance.powerbar.update();
         } else {
             return;
         }
@@ -65,48 +114,67 @@ public class Player extends Actor {
         double angle = Math.atan2(y - getY() + 50, x - getX());
         Bullet b = new Bullet(angle);
         Screen screen = (Screen) getWorld();
-        screen.addObject(b, getX(), getY()-50);
+        screen.addObject(b, getX(), getY() - 50);
 
     }
+
     public void kill() {
         Dead dead = new Dead();
         Greenfoot.setWorld(dead);
-        sound.stop();
+        stopSounds();
         Greenfoot.playSound("./sounds/dead.mp3");
     }
-    /**
-     * Act - do whatever the Player wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
 
-    public void act() {
-        int currentX = getX();
-        int currentY = getY();
-        int mov = 5;
-
-
-        Direction dir = null;
+    public void checkCollisions() {
         if (isTouching(Coin.class)) {
             ArrayList<Coin> coins = (ArrayList<Coin>) getIntersectingObjects(Coin.class);
             for (Coin coin : coins) {
                 coin.collect();
             }
         }
-        if ( Greenfoot.mousePressed(null)) {
+        if (isTouching(Pill.class)) {
+            ArrayList<Pill> pills = (ArrayList<Pill>) getIntersectingObjects(Pill.class);
+            for (Pill pill : pills) {
+                pill.collect();
+            }
+        }
+        if (isTouching(SweepingLaser.class)) {
+
+            SweepingLaser laser = (SweepingLaser) getIntersectingObjects(SweepingLaser.class).get(0);
+            if (!laser.laserHit) {
+                laser.laserHit = true;
+                takeDamage(1);
+
+            }
+        }
+    }
+
+    public void takeDamage(int amt) {
+        health -= amt;
+        StatsUI.instance.hearts.update();
+        if (health <= 0) {
+            kill();
+        }
+    }
+
+    public Direction doMovement() {
+        Direction dir = null;
+        int currentX = getX();
+        int currentY = getY();
+        int mov = 5;
+        if (Greenfoot.mousePressed(null)) {
             shoot();
         }
         if (Greenfoot.isKeyDown("w")) {
             currentY -= mov;
             dir = Direction.UP;
         }
-      
         if (Greenfoot.isKeyDown("s")) {
-
 
             currentY += mov;
             dir = Direction.DOWN;
         }
-          if (Greenfoot.isKeyDown("a")) {
+        if (Greenfoot.isKeyDown("a")) {
             currentX -= mov;
             dir = Direction.LEFT;
         }
@@ -114,73 +182,72 @@ public class Player extends Actor {
             currentX += mov;
             dir = Direction.RIGHT;
         }
-        
-        boolean moved = Math.abs(currentX-getX()) > 0 || Math.abs(currentY - getY()) > 0;
-        int oldX = getX();
-        int oldY = getY();
+
+        boolean moved = Math.abs(currentX - getX()) > 0 || Math.abs(currentY - getY()) > 0;
         setLocation(currentX, currentY);
+        GreenfootSound walking = Screen.currentScreen.walkingSound;
         if (moved) {
-            if (!sound.isPlaying())
+            if (!walking.isPlaying())
                 try {
-                    sound.playLoop();
+                    walking.play();
                 } catch (Exception e) {
                     // TODO: handle exception
-                    System.out.println("Sound error");
                 }
         } else {
-            sound.stop();
+            walking.stop();
         }
-        boolean blocked = false;
-        if (isTouching(Box.class)) {
-            // revert move when colliding with a Box
-            setLocation(oldX, oldY);
-            blocked = true;
-        }
+        return dir;
+    }
 
-        if (moved && !blocked) {
+    public void act() {
 
-            move(dir);
-            ((Screen)getWorld()).checkActorCollisions(this);
+        Direction dir = doMovement();
+
+        if (dir != null) {
+
+            movementAnimation(dir);
 
         } else {
-            String path = a(idle);
-            GreenfootImage img = new GreenfootImage(path);
-            img.scale(width, height);
+            resetImg();
+        }
+        checkCollisions();
+        if (getWorld() != null) {
+            Screen.currentScreen.checkPlayerCollisions();
+        }
 
-            setImage(img);
-        }
-        facing = dir;
-        if(isTouching(SweepingLaser.class)) {
-            kill();
-        }
     }
-    public void placeInNewScreen() {
-        Screen screen = (Screen) getWorld();
-        screen.addObject(hb, 0, 0);
-      
-        hb.placeInNewScreen();
+
+    public void resetImg() {
+        idleImg.scale(width, height);
+
+        setImage(idleImg);
     }
-    public void move(Direction dir) {
-        
+
+    @Override
+    public void afterAdded() {
+        // @todo
+        // hb.placeInNewScreen();
+
+        StatsUI.instance.afterAdded();
+    }
+
+    Direction lastDir = Direction.RIGHT;
+
+    public void movementAnimation(Direction dir) {
+
         delta += 1;
         if (delta % 5 == 0) {
-            String path = a(paths[current]);
-            GreenfootImage img = new GreenfootImage(path);
-            img.scale(width, height);
+            GreenfootImage img = runFramesRight[current];
             if (dir == Direction.LEFT) {
-                img.mirrorHorizontally();
+                img = runFramesLeft[current];
+            } else if (dir == Direction.RIGHT) {
+                img = runFramesRight[current];
             }
+
+            lastDir = dir;
             setImage(img);
 
-            current = (current + 1) % paths.length;
-        }
-        
-        if (isTouching(Pill.class))
-        {
-            ArrayList<Pill> pills = (ArrayList<Pill>) getIntersectingObjects(Pill.class);
-            for (Pill pill : pills) {
-                pill.collect();
-            }
+            current = (current + 1) % runFramesRight.length;
         }
 
     }

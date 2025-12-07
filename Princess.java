@@ -4,42 +4,51 @@ import greenfoot.sound.SoundFactory;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RGBImageFilter;
+
 public class Princess extends Boss {
     SweepingLaser laser = new SweepingLaser();
-    public int delta = 0;
+    public int delta = -30;
     public boolean alive = true;
-    public boolean laserCasted = false;
+    static GreenfootImage princess = new GreenfootImage("./images/princess.png");
+
+    @Override
+    public GreenfootImage getBossImage() {
+        return princess;
+    }
+
     public Princess() {
-        super("./images/princess.png");
+        super();
         this.health = 10;
 
     }
+
     public void init() {
     }
+
     @Override
     public void onDeath() {
         alive = false;
         // Greenfoot.playSound("./sounds/princess_defeated.mp3");
         Screen world = (Screen) getWorld();
-            world.removeObject(laser);
+        world.removeObject(laser);
         // world.player.canMoveOn = true;
         Sound sound = SoundFactory.getInstance().createSound("./sounds/yay.mp3", false);
         if (sound != null) {
             sound.play();
         }
         fade();
-        world.player.defeatedBosses += 1;
+        Player.instance.defeatedBosses += 1;
         Coin coin = new Coin();
         world.addObject(coin, getX(), getY());
-
+        world.mayLeave = true;
     }
+
     @Override
     public void onHit() {
-        flashRed();
-        Greenfoot.delay(2);
-        resetImg();
-        
+        health -= 1;
+
     }
+
     public void act() {
         if (!alive)
             return;
@@ -47,34 +56,38 @@ public class Princess extends Boss {
         super.act();
         if (delta == 30) {
             castLaser();
-            laserCasted = true;
         }
         delta += 1;
 
-        if (laserCasted)
+        if (laser.laserCasted && delta % 2 == 0)
             updateLaser();
-        if (delta  == 80) {
+        if (delta == 60 && laser.laserCasted) {
             getWorld().removeObject(laser);
-            laserCasted = false;
+            laser.laserCasted = false;
             delta = 0;
         }
 
     }
+
     public void updateLaser() {
         // setLocation will set the center of the laser
         // thus it should be the midpoint between the princess and the player
         World world = getWorld();
         if (world == null)
             return;
-        
-        laser.setRotation(Math.toRadians(laser.getRotation()+1),getX(), getY());
-        
+
+        laser.setRotation(Math.toRadians(laser.getRotation() + 3), getX(), getY());
+
     }
+
     public void castLaser() {
+
         World world = getWorld();
-        world.addObject(laser, 0,0);
+        world.addObject(laser, 0, 0);
         Player plr = getWorld().getObjects(Player.class).get(0);
         double angle = Math.atan2(plr.getY() - getY(), plr.getX() - getX());
-        laser.setRotation(angle-Math.PI/6, getX(), getY());
+        laser.setRotation(angle - Math.PI / 5, getX(), getY());
+        laser.laserCasted = true;
+        laser.laserHit = false;
     }
 }

@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=ActCounter
+comment1.params=
+comment1.target=ActCounter()
+comment2.params=
+comment2.target=void\ act()
+comment3.params=aps
+comment3.target=void\ updateDisplay(double)
+numComments=4

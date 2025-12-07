@@ -3,7 +3,7 @@ import greenfoot.*;
 /**
  * Write a description of class Button here.
  * 
- * @author (your name) 
+ * @author (your name)
  * @version (a version number or a date)
  */
 class Button extends Actor {
@@ -13,9 +13,15 @@ class Button extends Actor {
     public Button(String path, OnClick onClick) {
         this.buttonImage = new GreenfootImage(path);
         this.onClick = onClick;
-        setImage(buttonImage);        
+        setImage(buttonImage);
     }
-    
+
+    public Button(GreenfootImage img, OnClick onClick) {
+        this.buttonImage = img;
+        this.onClick = onClick;
+        setImage(buttonImage);
+    }
+
     public void act() {
         // Check for mouse interaction
         if (Greenfoot.mouseClicked(this)) {
@@ -25,16 +31,18 @@ class Button extends Actor {
             onClick.execute();
             // Or you could print a message to the console:
 
-        }   
+        }
     }
+
     public int getWidth() {
         return buttonImage.getWidth();
-    }   
+    }
+
     public int getHeight() {
         return buttonImage.getHeight();
     }
 }
+
 interface OnClick {
     void execute();
 }
-

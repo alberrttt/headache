@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=CannonBall
+comment1.params=angle
+comment1.target=CannonBall(double)
+comment2.params=
+comment2.target=void\ act()
+numComments=3
