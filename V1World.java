@@ -12,7 +12,6 @@ public class V1World extends Screen {
         super();
         this.addObject(Player.getInstance(), 0, getHeight() / 2);
         Screen.currentScreen = this;
-        Player.getInstance().afterAdded();
         init();
     }
 
@@ -35,6 +34,10 @@ public class V1World extends Screen {
         addObject(princess, getWidth() / 2, getHeight() / 2);
         princess.init();
         this.right = new CannonWorld(this, null, null, null);
+        // spawn pills
+        for (int i = 0; i < 5; i++) {
+            Pill.spawnPill(this);
+        }
     }
 
 }

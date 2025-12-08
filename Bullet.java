@@ -22,7 +22,6 @@ public class Bullet extends Actor {
         this.angle = angle;
         setImage(bulletImg);
         setRotation((int) (angle * 180 / Math.PI));
-        Greenfoot.playSound("./sounds/laser-312360.mp3");
     }
 
     public void act() {

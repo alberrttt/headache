@@ -1,24 +1,24 @@
 import greenfoot.*;
 
-public class StatsUI implements AfterAdded {
+public class StatsUI extends Actor {
     static StatsUI instance = new StatsUI();
     Powerbar powerbar;
-    Hearts hearts;
+    Heartsbar hearts;
 
     public StatsUI() {
         powerbar = new Powerbar();
-        hearts = new Hearts();
+        hearts = new Heartsbar(null, 1, 0);
     }
 
     @Override
-    public void afterAdded() {
-        Screen world = Screen.currentScreen;
-        update();
-        int start = world.getHeight() - powerbar.getImage().getHeight() / 2 - 200;
+    public void addedToWorld(World w) {
+        int start = w.getHeight() - powerbar.getImage().getHeight() / 2 - 200;
         int leftStart = 50;
-        world.addObject(powerbar, powerbar.getImage().getWidth() / 2 + leftStart,
+        w.addObject(powerbar, powerbar.getImage().getWidth() / 2 + leftStart,
                 start);
-        world.addObject(hearts, start + hearts.getImage().getWidth() / 2, leftStart);
+        w.addObject(hearts, start + hearts.getImage().getWidth() / 2, leftStart);
+        update();
+
     }
 
     public void update() {

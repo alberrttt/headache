@@ -2,4 +2,10 @@
 comment0.target=CannonWorld
 comment1.params=left\ right\ top\ bottom
 comment1.target=CannonWorld(Screen,\ Screen,\ Screen,\ Screen)
-numComments=2
+comment2.params=
+comment2.target=CannonWorld()
+comment3.params=
+comment3.target=void\ init()
+comment4.params=yPos
+comment4.target=void\ placeCannoneersOn(int)
+numComments=5

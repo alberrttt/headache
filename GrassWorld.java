@@ -27,21 +27,21 @@ public class GrassWorld extends Screen {
     public GrassWorld() {
         super();
         this.mayLeave = true;
+        Screen.currentScreen = this;
         Player player = new Player();
         this.addObject(player, getWidth() / 2, getHeight() / 2);
-        Screen.currentScreen = this;
 
         int medicines = 10;
         for (int i = 0; i < medicines; i++) {
             // make them spawn in the area that is not 250x250 from center
             spawnPill();
         }
-        player.afterAdded();
 
         setBackground("./images/grass.png");
         getBackground().drawImage(treeImages[0], 200, 50);
         Screen right = new V1World(null, null, this, null);
         this.setAdjacentScreens(null, null, null, right);
+
     }
 
     public void spawnPill() {

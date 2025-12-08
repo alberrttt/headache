@@ -6,7 +6,7 @@ public class ActCounter extends Actor {
     private long lastTime = System.currentTimeMillis();
 
     public ActCounter() {
-        setImage(new GreenfootImage("APS: 0", 20, Color.WHITE, new Color(0, 0, 0, 0)));
+        setImage(new GreenfootImage("APS: 0", 20, Color.BLACK, Color.WHITE));
     }
 
     public void act() {
@@ -21,6 +21,6 @@ public class ActCounter extends Actor {
     }
 
     private void updateDisplay(double aps) {
-        setImage(new GreenfootImage("APS: " + aps, 20, Color.WHITE, new Color(0, 0, 0, 0)));
+        setImage(new GreenfootImage("APS: " + aps, 20, Color.BLACK, Color.WHITE));
     }
 }

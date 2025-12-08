@@ -6,7 +6,7 @@ import greenfoot.*; // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Powerbar extends Actor implements AfterAdded {
+public class Powerbar extends Actor {
     /**
      * Act - do whatever the Healthbar wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -33,14 +33,15 @@ public class Powerbar extends Actor implements AfterAdded {
     }
 
     @Override
-    public void afterAdded() {
+    public void addedToWorld(World w) {
         Screen screen = (Screen) getWorld();
 
-        setLocation(50 + main.getWidth() / 2, screen.getHeight() - main.getHeight() - 10);
+        setLocation(screen.getWidth() - main.getWidth() / 2 - StatsUI.instance.hearts.getImage().getWidth() / 2 - 25,
+                screen.getHeight() - main.getHeight() / 2 - 80);
     }
 
     public void act() {
-        // Add your action code here.
+        // // Add your action code here.
         Player player = Player.getInstance();
         setLocation(player.getX(), player.getY() + 100);
 

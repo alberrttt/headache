@@ -28,10 +28,10 @@ public class Cannoneer extends Boss {
         double angle = Math.atan2(plr.getY() - getY(), plr.getX() - getX());
         setRotation((int) (Math.toDegrees(angle)) - 90);
         super.act();
-        if (delta >= (20 + (int) (Math.random() * 10))) {
+        if (delta >= (50 + (int) (Math.random() * 500))) {
             delta = 0;
 
-            CannonBall ball = new CannonBall(angle);
+            CannonBall ball = new CannonBall(angle * (1 - Math.random() / 7));
             getWorld().addObject(ball, getX(), getY());
         }
         delta++;

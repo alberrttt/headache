@@ -2,6 +2,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.io.ObjectInputFilter.Status;
 import java.nio.Buffer;
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ enum Direction {
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Player extends Actor implements AfterAdded {
+public class Player extends Actor implements Owner {
     static Player instance = null;
 
     static Player getInstance() {
@@ -33,6 +34,16 @@ public class Player extends Actor implements AfterAdded {
     public int current = 0;
     public int delta = 0;
     static final String idle = "R1";
+
+    @Override
+    public int getYPos() {
+        return getY() - 100;
+    }
+
+    @Override
+    public int getXPos() {
+        return getX();
+    }
 
     public String a(String x) {
         return "./images/" + x + ".png";
@@ -60,17 +71,20 @@ public class Player extends Actor implements AfterAdded {
             runFramesLeft[i] = img;
         }
     }
-    public double charges = 20.0;
+    public double initialCharges = 20.0;
+
+    public double charges = initialCharges;
     public double maxCharges = 20.0;
     public double defeatedBosses = 0;
-    public int health = 3;
-    public int maxHealth = 5;
+    public int health = 5;
+    public int maxHealth = 10;
 
     public void incHealth(int amt) {
         this.health += amt;
         if (this.health > this.maxHealth) {
             this.health = this.maxHealth;
         }
+        StatsUI.instance.hearts.currentHearts = this.health;
         StatsUI.instance.hearts.update();
     }
 
@@ -86,7 +100,9 @@ public class Player extends Actor implements AfterAdded {
         GreenfootImage img = new GreenfootImage(path);
         img.scale(width, height);
         setImage(img);
-
+        health = 10;
+        maxHealth = 10;
+        charges = initialCharges;
         instance = this;
     }
 
@@ -113,16 +129,19 @@ public class Player extends Actor implements AfterAdded {
         int y = m.getY();
         double angle = Math.atan2(y - getY() + 50, x - getX());
         Bullet b = new Bullet(angle);
-        Screen screen = (Screen) getWorld();
-        screen.addObject(b, getX(), getY() - 50);
+        getWorld().addObject(b, getX(), getY() - 25);
+        Greenfoot.playSound("./sounds/laser-312360.mp3");
 
     }
 
+    public int deathScreenTimer = -1;
+
     public void kill() {
-        Dead dead = new Dead();
-        Greenfoot.setWorld(dead);
+        deathScreenTimer = 100;
         stopSounds();
         Greenfoot.playSound("./sounds/dead.mp3");
+        Dead dead = new Dead();
+        Greenfoot.setWorld(dead);
     }
 
     public void checkCollisions() {
@@ -149,19 +168,51 @@ public class Player extends Actor implements AfterAdded {
         }
     }
 
+    public int slowFrames = 0;
+
+    public void slow(int frames) {
+        slowFrames = frames;
+
+    }
+
     public void takeDamage(int amt) {
         health -= amt;
+        StatsUI.instance.hearts.currentHearts = health;
         StatsUI.instance.hearts.update();
         if (health <= 0) {
             kill();
         }
     }
 
+    public void dash(Direction dir) {
+        int dashDistance = 100;
+        if (slowFrames > 0) {
+            dashDistance = 50;
+        }
+        if (dir == Direction.UP) {
+            setLocation(getX(), getY() - dashDistance);
+        } else if (dir == Direction.DOWN) {
+            setLocation(getX(), getY() + dashDistance);
+        } else if (dir == Direction.LEFT) {
+            setLocation(getX() - dashDistance, getY());
+        } else if (dir == Direction.RIGHT) {
+            setLocation(getX() + dashDistance, getY());
+        }
+
+    }
+
+    public int dashCooldown = 0;
+
     public Direction doMovement() {
         Direction dir = null;
+
         int currentX = getX();
         int currentY = getY();
         int mov = 5;
+        if (slowFrames > 0) {
+            mov = 2;
+            slowFrames -= 1;
+        }
         if (Greenfoot.mousePressed(null)) {
             shoot();
         }
@@ -185,6 +236,17 @@ public class Player extends Actor implements AfterAdded {
 
         boolean moved = Math.abs(currentX - getX()) > 0 || Math.abs(currentY - getY()) > 0;
         setLocation(currentX, currentY);
+        if (Greenfoot.isKeyDown("q") && dashCooldown <= 0 && dir != null) {
+            if (charges >= 2) {
+                dash(dir);
+                charges -= 2;
+                StatsUI.instance.powerbar.update();
+                dashCooldown = 20;
+            }
+
+        } else {
+            dashCooldown -= 1;
+        }
         GreenfootSound walking = Screen.currentScreen.walkingSound;
         if (moved) {
             if (!walking.isPlaying())
@@ -199,8 +261,19 @@ public class Player extends Actor implements AfterAdded {
         return dir;
     }
 
-    public void act() {
+    int count = 0;
 
+    public void act() {
+        if (health <= 0) {
+
+            return;
+        }
+        if (count >= 200) {
+            count = 0;
+            incCharges(1);
+        } else {
+            count++;
+        }
         Direction dir = doMovement();
 
         if (dir != null) {
@@ -224,11 +297,12 @@ public class Player extends Actor implements AfterAdded {
     }
 
     @Override
-    public void afterAdded() {
+    public void addedToWorld(World w) {
         // @todo
         // hb.placeInNewScreen();
-
-        StatsUI.instance.afterAdded();
+        StatsUI.instance.hearts.maxHearts = maxHealth;
+        StatsUI.instance.hearts.currentHearts = health;
+        w.addObject(StatsUI.instance, 0, 0);
     }
 
     Direction lastDir = Direction.RIGHT;

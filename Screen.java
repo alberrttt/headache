@@ -21,6 +21,7 @@ public class Screen extends World {
 
     public Screen() {
         super(1600, 900, 1);
+        setPaintOrder(Hearts.class, Powerbar.class, Boss.class, Skeleton.class);
         addObject(new ActCounter(), 50, 50);
     }
 
@@ -84,14 +85,14 @@ public class Screen extends World {
 
     public void changeScreen(Screen newScreen, int x, int y) {
         Player player = Player.instance;
+        currentScreen = newScreen;
+
         player.stopSounds();
         newScreen.addObject(player, x, y);
         fadeOutScreen();
         Greenfoot.setWorld(newScreen);
         fadeInScreen(newScreen);
-        currentScreen = newScreen;
         newScreen.after();
-        player.afterAdded();
     }
 
     public boolean checkPlayerCollisions() {

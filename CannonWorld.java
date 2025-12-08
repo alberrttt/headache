@@ -1,26 +1,33 @@
+
 import greenfoot.GreenfootImage;
 
 public class CannonWorld extends Screen {
     public CannonWorld(Screen left, Screen right, Screen top, Screen bottom) {
 
         super();
-        this.setAdjacentScreens(top, bottom, left, right);
+        SkeletonWorld world = new SkeletonWorld(this);
+
+        this.setAdjacentScreens(top, bottom, left, world);
         init();
     }
 
     public CannonWorld() {
         super();
+        SkeletonWorld world = new SkeletonWorld(this);
+        this.right = world;
         init();
-        Player p = Player.getInstance();
+
+        Player p = new Player();
         this.addObject(p, 0, getHeight() / 2);
         Screen.currentScreen = this;
-        p.afterAdded();
     }
 
     public void init() {
         setBackground("./images/cannon_bg.png");
         placeCannoneersOn(150);
         placeCannoneersOn(getHeight() - 150);
+        for (int i = 0; i < 5; i++) {
+        }
     }
 
     public void placeCannoneersOn(int yPos) {

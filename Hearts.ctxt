@@ -1,9 +1,13 @@
 #BlueJ class context
 comment0.target=Hearts
 comment1.params=
-comment1.target=Hearts()
+comment1.target=int\ getYPos()
 comment2.params=
-comment2.target=void\ act()
-comment3.params=
-comment3.target=void\ update()
-numComments=4
+comment2.target=int\ getXPos()
+comment3.params=owner
+comment3.target=Hearts(Owner)
+comment4.params=
+comment4.target=void\ act()
+comment5.params=
+comment5.target=void\ update()
+numComments=6

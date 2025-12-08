@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=SkeletonWorld
+comment1.params=left
+comment1.target=SkeletonWorld(Screen)
+comment2.params=
+comment2.target=SkeletonWorld()
+comment3.params=
+comment3.target=void\ init()
+comment4.params=
+comment4.target=void\ spawnSkeleton()
+numComments=5

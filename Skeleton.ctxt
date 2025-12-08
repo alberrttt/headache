@@ -1,0 +1,26 @@
+#BlueJ class context
+comment0.target=Skeleton
+comment1.params=
+comment1.target=int\ getYPos()
+comment10.params=
+comment10.target=void\ attack()
+comment2.params=
+comment2.target=int\ getXPos()
+comment3.params=world
+comment3.target=void\ addedToWorld(greenfoot.World)
+comment4.params=
+comment4.target=Skeleton()
+comment5.params=sprite
+comment5.target=greenfoot.GreenfootImage\ createCompositeImage(greenfoot.GreenfootImage)
+comment5.text=\r\n\ Override\ getImage\ to\ composite\ the\ sprite\ with\ hitbox\ for\ collision\ detection\r\n
+comment6.params=cls
+comment6.target=boolean\ isTouchingWithHitbox(java.lang.Class)
+comment6.text=\r\n\ Custom\ collision\ detection\ using\ the\ smaller\ hitbox\r\n
+comment7.params=cls
+comment7.target=void\ removeTouchingWithHitbox(java.lang.Class)
+comment7.text=\r\n\ Remove\ touching\ objects\ using\ custom\ hitbox\ detection\r\n
+comment8.params=radius
+comment8.target=double[]\ separationVector(double)
+comment9.params=
+comment9.target=void\ act()
+numComments=11

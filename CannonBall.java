@@ -33,10 +33,11 @@ public class CannonBall extends Actor {
             getWorld().removeObject(this);
             return;
         }
-        move(5 + (int) (Math.random() * 4));
+        move(20 + (int) (Math.random() * 10));
         if (isTouching(Player.class)) {
             Player plr = getWorld().getObjects(Player.class).get(0);
             plr.takeDamage(1);
+            plr.slow(10);
             getWorld().removeObject(this);
         }
     }
