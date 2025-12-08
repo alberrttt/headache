@@ -71,7 +71,7 @@ public class Player extends Actor implements Owner {
             runFramesLeft[i] = img;
         }
     }
-    public double initialCharges = 20.0;
+    public double initialCharges = 5.0;
 
     public double charges = initialCharges;
     public double maxCharges = 20.0;
@@ -89,7 +89,6 @@ public class Player extends Actor implements Owner {
     }
 
     public int coins = 0;
-    static Powerbar pb = StatsUI.instance.powerbar;
 
     public void stopSounds() {
         Screen.currentScreen.walkingSound.stop();
@@ -111,7 +110,7 @@ public class Player extends Actor implements Owner {
         if (this.charges > this.maxCharges) {
             this.charges = this.maxCharges;
         }
-        pb.update();
+        StatsUI.instance.powerbar.update();
     }
 
     public void shoot() {

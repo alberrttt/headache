@@ -9,8 +9,8 @@ public class Coin extends Actor {
 
     public void collect() {
         getWorld().removeObject(this);
-        Player.instance.incCharges(2);
-        Player.instance.incHealth(1);
+        Player.instance.incCharges(5);
+        Player.instance.incHealth(2);
         StatsUI.instance.update();
         Greenfoot.playSound("./sounds/collect_item.mp3");
     }

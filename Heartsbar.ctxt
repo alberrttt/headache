@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Heartsbar
+comment1.params=owner\ maxHearts\ currentHearts
+comment1.target=Heartsbar(Owner,\ int,\ int)
+comment2.params=
+comment2.target=void\ act()
+comment3.params=w
+comment3.target=void\ addedToWorld(greenfoot.World)
+comment4.params=
+comment4.target=void\ update()
+numComments=5

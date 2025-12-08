@@ -1,13 +1,15 @@
 import java.util.List;
 
 import greenfoot.*;
-
+class OnDeath {
+    public void onDeath() {}
+}
 public class Skeleton extends SmoothMover implements Owner {
     static GifImage idle = new GifImage("./images/skele/skele_idle.gif");
     static GifImage walk = new GifImage("./images/skele/skele_walk.gif");
     static GifImage death = new GifImage("./images/skele/skele_death.gif");
     static GifImage attack = new GifImage("./images/skele/skele_attack.gif");
-
+    public OnDeath onDeath = new OnDeath();
     static {
         GifImage[] gifs = { idle, walk, death, attack };
         for (GifImage gif : gifs) {
@@ -49,40 +51,18 @@ public class Skeleton extends SmoothMover implements Owner {
         // Create a centered hitbox of 126x82 pixels
         // Original sprite is 63x41, scaled 5x = 315x205
         // Hitbox is approximately 2x the original size, centered
-        hitboxImage = new GreenfootImage(126, 82);
-        hitboxImage.setColor(new Color(0, 0, 0, 0)); // Transparent
-        hitboxImage.fill();
-
+    
+            
     }
 
-    /**
-     * Override getImage to composite the sprite with hitbox for collision detection
-     */
-    private GreenfootImage createCompositeImage(GreenfootImage sprite) {
-        // Create a new image with the same size as the sprite
-        int spriteWidth = sprite.getWidth();
-        int spriteHeight = sprite.getHeight();
-        GreenfootImage composite = new GreenfootImage(spriteWidth, spriteHeight);
-
-        // Draw the sprite
-        composite.drawImage(sprite, 0, 0);
-
-        // Calculate center position for hitbox
-        int hitboxX = (spriteWidth - hitboxImage.getWidth()) / 2;
-        int hitboxY = (spriteHeight - hitboxImage.getHeight()) / 2;
-
-        // The hitbox is used internally by Greenfoot for collision detection
-        // We set the actual collision image to be the smaller hitbox
-        return composite;
-    }
-
+ 
     /**
      * Custom collision detection using the smaller hitbox
      */
     public boolean isTouchingWithHitbox(Class<?> cls) {
         List<?> objects = getWorld().getObjects(cls);
         int hitboxWidth = 126;
-        int hitboxHeight = 82;
+        int hitboxHeight = 202;
 
         for (Object obj : objects) {
             Actor other = (Actor) obj;
@@ -103,7 +83,7 @@ public class Skeleton extends SmoothMover implements Owner {
     public void removeTouchingWithHitbox(Class<?> cls) {
         List<?> objects = getWorld().getObjects(cls);
         int hitboxWidth = 126;
-        int hitboxHeight = 82;
+        int hitboxHeight = 202;
 
         for (Object obj : objects) {
             Actor other = (Actor) obj;
@@ -159,7 +139,7 @@ public class Skeleton extends SmoothMover implements Owner {
         int playerY = player.getY();
         int myX = getX();
         int myY = getY();
-        int speed = 7;
+        int speed = 14;
         double hyp = Math.sqrt((playerX - myX) * (playerX - myX) + (playerY - myY) * (playerY - myY));
         if (health <= 0) {
             // Play death animation
@@ -167,8 +147,11 @@ public class Skeleton extends SmoothMover implements Owner {
             setImage(img);
 
             if (de.currentIndex + 1 >= de.getImages().size()) {
-                Coin c = new Coin();
-                getWorld().addObject(c, getX(), getY());
+                onDeath.onDeath();
+                if (Math.random() >= 0.2) {
+                    Coin c = new Coin();
+                    getWorld().addObject(c, getX(), getY());
+                }
                 getWorld().removeObject(hearts);
                 getWorld().removeObject(this);
 
@@ -176,11 +159,12 @@ public class Skeleton extends SmoothMover implements Owner {
             return;
         }
         if (isTouchingWithHitbox(Bullet.class)) {
+            removeTouchingWithHitbox(Bullet.class);
+
             health -= 1;
             aggroed = true;
             hearts.currentHearts = health;
             hearts.update();
-            removeTouchingWithHitbox(Bullet.class);
         }
         if (hyp <= 90 || attackFrame > 0) {
             attack();
@@ -240,7 +224,7 @@ public class Skeleton extends SmoothMover implements Owner {
         if (attackFrame == 6 && delta >= at.delay[5]) {
             // Check for collision with player
             if (this.getObjectsInRange(180, Player.class).size() > 0) {
-                player.takeDamage(2);
+                player.takeDamage(4);
                 player.slow(50);
             }
         }

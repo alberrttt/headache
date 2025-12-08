@@ -27,7 +27,7 @@ public class Pill extends Actor {
                 setImage(img);
         }
 
-        public static void spawnPill(World world) {
+        public static void spawnPill(World world, int xO) {
 
                 Actor pill = new Pill();
 
@@ -42,12 +42,14 @@ public class Pill extends Actor {
                         int threshold = 125; // 250/2
                         if (Math.abs(x - centerX) > threshold || Math.abs(y - centerY) > threshold) {
                                 validLocation = true;
-                                world.addObject(pill, x, y);
+                                world.addObject(pill, x +xO , y);
                         }
                 }
 
         }
-
+        public static void spawnPill(World world) {
+                spawnPill(world, 0);
+        }
         /**
          * Act - do whatever the Pill wants to do. This method is called whenever
          * the 'Act' or 'Run' button gets pressed in the environment.

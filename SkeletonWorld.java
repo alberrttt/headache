@@ -1,6 +1,7 @@
 import greenfoot.Greenfoot;
 
 public class SkeletonWorld extends Screen {
+    static int num = 0;
     public SkeletonWorld(Screen left) {
         super();
         init();
@@ -12,18 +13,26 @@ public class SkeletonWorld extends Screen {
         Player p = new Player();
         StatsUI.instance = new StatsUI();
         this.currentScreen = this;
-        this.addObject(p, getWidth() / 2, getHeight() / 2);
+        this.addObject(p, 0, getHeight() / 2);
 
         init();
-
+        
     }
 
     public void init() {
+        
+        setBackground("./images/cannon_bg.png");
+
         for (int i = 0; i < 7; i++) {
             spawnSkeleton();
         }
-    }
+        num++;
 
+        if (num < 3) {
+            this.right = new SkeletonWorld(this);
+        }
+    }
+    public int numKilled = 0;
     public void spawnSkeleton() {
         Skeleton skeleton = new Skeleton();
 
@@ -41,5 +50,18 @@ public class SkeletonWorld extends Screen {
                 this.addObject(skeleton, x, y);
             }
         }
+        SkeletonWorld a = this;
+        class Dead extends OnDeath {
+            @Override
+            public void onDeath() {
+                numKilled++;
+                if (numKilled >= 3) {
+                    a.mayLeave = true;
+                }
+            }
+        }
+        skeleton.onDeath = new Dead();
+
+        
     }
 }

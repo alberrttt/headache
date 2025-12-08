@@ -4,7 +4,7 @@ public class Dead extends Screen {
     public Dead() {
         super();
 
-        GreenfootImage text = new GreenfootImage("You Died", 100, greenfoot.Color.BLACK,
+        GreenfootImage text = new GreenfootImage(" You Died ", 100, greenfoot.Color.BLACK,
                 new greenfoot.Color(0, 0, 0, 0));
 
         Button retry = new Button("./images/Retry.png", new OnClick() {

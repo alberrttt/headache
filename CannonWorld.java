@@ -27,6 +27,7 @@ public class CannonWorld extends Screen {
         placeCannoneersOn(150);
         placeCannoneersOn(getHeight() - 150);
         for (int i = 0; i < 5; i++) {
+            Pill.spawnPill(this, 500);
         }
     }
 
